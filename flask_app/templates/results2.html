@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Pair Trading Analysis Results</h1>
+    <h2>Correlation: {{ correlation }}</h2>
+    <h3>Spread Data</h3>
+    {% for table in tables %}
+        {{ table|safe }}
+    {% endfor %}
+    <a href="/">Back to Home</a>
+</body>
+</html>

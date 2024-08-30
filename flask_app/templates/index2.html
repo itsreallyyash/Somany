@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pair Trading Screen</title>
+</head>
+<body>
+    <h1>Pair Trading Screen</h1>
+    <form method="post">
+        <label for="pair">Select Pair:</label>
+        <select name="pair" id="pair">
+            {% for pair in pairs %}
+                <option value="{{ pair[0] }},{{ pair[1] }}">{{ pair[0] }} - {{ pair[1] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Analyze</button>
+    </form>
+</body>
+</html>

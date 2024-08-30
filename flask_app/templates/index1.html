@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Screening</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        form {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #222;
+            color: #f5f5f5;
+        }
+        button {
+            background: #4CAF50;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Screening with VCP</h1>
+    <form method="POST">
+        <label for="filter_param">Filter Parameter:</label>
+        <select id="filter_param" name="filter_param">
+            <option value="volume">Volume</option>
+            <option value="close">Close</option>
+        </select>
+        <br><br>
+        <label for="threshold">Threshold:</label>
+        <input type="number" id="threshold" name="threshold" step="0.01" value="0">
+        <br><br>
+        <label for="short_window">Short Moving Average Window:</label>
+        <input type="number" id="short_window" name="short_window" value="9">
+        <br><br>
+        <label for="long_window">Long Moving Average Window:</label>
+        <input type="number" id="long_window" name="long_window" value="21">
+        <br><br>
+        <label for="vcp_threshold">VCP Contraction Threshold:</label>
+        <input type="number" id="vcp_threshold" name="vcp_threshold" step="0.01" value="0.1">
+        <br><br>
+        <label for="summary_type">Summary Type:</label>
+        <select id="summary_type" name="summary_type">
+            <option value="detailed">Detailed</option>
+            <option value="summary">Executive Summary</option>
+        </select>
+        <br><br>
+        <label for="signal_filter">Filter by Signal:</label>
+        <select id="signal_filter" name="signal_filter">
+            <option value="">All</option>
+            <option value="Buy">Buy</option>
+            <option value="Sell">Sell</option>
+        </select>
+        <br><br>
+        <button type="submit">Screen Stocks</button>
+    </form>
+</body>
+</html>
