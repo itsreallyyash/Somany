@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screened Stocks Results</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #555;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+        tr:hover {
+            background-color: #444;
+        }
+        .buy {
+            color: green;
+        }
+        .sell {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Screened Stocks Results</h1>
+    <h2>Data Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Sector</th>
+                <th>1 Week</th>
+                <th>1 Month</th>
+                <th>3 Months</th>
+                <th>6 Months</th>
+                <th>1 Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sector, performance in sector_performance.items() %}
+            <tr>
+                <td>{{ sector }}</td>
+                <td>{{ performance['1wk'] }}</td>
+                <td>{{ performance['1m'] }}</td>
+                <td>{{ performance['3mo'] }}</td>
+                <td>{{ performance['6mo'] }}</td>
+                <td>{{ performance['1yr'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/">Back to Form</a>
+</body>
+</html>

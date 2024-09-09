@@ -5,11 +5,11 @@ import numpy as np
 import time
 
 app = Flask(__name__)
-nifty500_symbols = ['RELIANCE.NS', 'INFY.NS', 'ACC.NS ','TCS.NS']
+nifty500_symbols = ['360ONE.NS', '3MINDIA.NS']
 def calculate_moving_averages(df, short_window=9, long_window=21):
     df['SMA9'] = df['Close'].rolling(window=short_window).mean()
     df['SMA21'] = df['Close'].rolling(window=long_window).mean()
-    return df
+    return df 
 
 def calculate_relative_volatility(df):
     df['Returns'] = df['Close'].pct_change()
@@ -42,8 +42,7 @@ def screen_stocks(symbols, filter_param='volume', threshold=0, short_window=9, l
                 continue
             
             stock_data = calculate_moving_averages(stock_data, short_window, long_window)
-            stock_data = calculate_relative_volatility(stock_data)
-            vcp_detected = detect_vcp_pattern(stock_data, vcp_threshold)
+
             
             latest_data = stock_data.iloc[-1]
             cross_percentage = (latest_data['SMA9'] - latest_data['SMA21']) / latest_data['SMA21'] * 100
@@ -61,7 +60,6 @@ def screen_stocks(symbols, filter_param='volume', threshold=0, short_window=9, l
                     'SMA21': latest_data['SMA21'],
                     'Returns': latest_data['Returns'],
                     'Volatility': latest_data['Volatility'],
-                    'VCP_Detected': vcp_detected,
                     '% Crossed By': cross_percentage,
                     'Signal': signal
                 })
