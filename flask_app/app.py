@@ -8,7 +8,7 @@ import pandas as pd
 app = Flask(__name__)
 
 def get_stock_data(ticker):
-    stock_data = yf.download(ticker, period='6mo', interval='60m')
+    stock_data = yf.download(ticker, period='1wk', interval='1m')
     return stock_data
 
 def calculate_moving_averages(data):

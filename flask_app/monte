@@ -1,0 +1,40 @@
+import yfinance as yf
+import pandas as pd
+from prophet import Prophet
+import matplotlib.pyplot as plt
+
+# Step 1: Download historical data for a stock (AAPL in this case)
+ticker = "AAPL"
+df = yf.download(ticker, start="2015-01-01", end="2022-01-01")
+
+# Step 2: Format data for Prophet
+df = df.reset_index()
+df = df[['Date', 'Close']]
+df.columns = ['ds', 'y']  # Prophet requires columns to be named 'ds' (date) and 'y' (value)
+
+# Step 3: Create and fit the Prophet model
+model = Prophet(daily_seasonality=True)
+model.fit(df)
+
+# Step 4: Forecast future stock prices
+future = model.make_future_dataframe(periods=365)
+forecast = model.predict(future)
+
+# Step 5: Plot the forecast
+fig1 = model.plot(forecast)
+plt.title(f"{ticker} Stock Price Forecast")
+plt.show()
+
+# Step 6: Calculate ROI based on forecasted stock price
+initial_price = df['y'].iloc[-1]  # Last known stock price
+final_price = forecast['yhat'].iloc[-1]  # Forecasted stock price after 365 days
+roi = (final_price - initial_price) / initial_price * 100
+print(f"Predicted ROI for {ticker} after 1 year: {roi:.2f}%")
+
+# Step 7: Plot ROI in a chart
+plt.figure(figsize=(10, 6))
+plt.plot(forecast['ds'], forecast['yhat'], label="Forecasted Stock Price")
+plt.axhline(initial_price, color='red', linestyle='--', label="Initial Price")
+plt.title(f"{ticker} Stock Price Forecast and ROI")
+plt.legend()
+plt.show()

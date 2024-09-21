@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pairs Trading</title>
+</head>
+<body>
+    <h1>Pairs Trading Analysis</h1>
+    <button id="fetch-btn">Fetch Best Pairs</button>
+    <h2>Stagnant Sectors</h2>
+    <div id="sectors-list"></div>
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', function() {
+            fetch('/fetch_pairs')
+            .then(response => response.json())
+            .then(data => {
+                var sectorsList = document.getElementById('sectors-list');
+                sectorsList.innerHTML = '';
+                for (const [sector, pairs] of Object.entries(data)) {
+                    var sectorElement = document.createElement('div');
+                    sectorElement.innerHTML = `<h3>${sector}</h3>`;
+                    pairs.forEach(pair => {
+                        var pairElement = document.createElement('div');
+                        pairElement.textContent = `${pair[0]} and ${pair[1]} - p-value: ${pair[2]}`;
+                        sectorElement.appendChild(pairElement);
+                    });
+                    sectorsList.appendChild(sectorElement);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

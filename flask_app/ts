@@ -1,0 +1,121 @@
+import yfinance as yf
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. Data Collection for U.S., Japan, India, and EU Markets
+def download_data():
+    tickers = ['^GSPC', '^N225', '^NSEI', '^STOXX50E']  # S&P 500, Nikkei, Nifty, Euro Stoxx 50
+    data = {}
+    for ticker in tickers:
+        data[ticker] = yf.download(ticker, start='2015-01-01', end='2024-01-01')['Close']
+    return pd.DataFrame(data)
+
+# 2. Generate Simulated Predictions
+def generate_simulated_predictions(actual_prices):
+    np.random.seed(42)  # Set seed for reproducibility
+    noise = np.random.normal(0, 5, len(actual_prices))
+    predictions = actual_prices + noise
+    return predictions
+
+# 3. Backtesting Strategy and Calculate ROI
+def backtest_strategy(predictions, actual_prices, initial_capital=100000):
+    capital = initial_capital
+    positions = 0  # Starting with no positions
+    capital_over_time = [capital]
+
+    for i in range(1, len(predictions)):
+        if predictions[i] > actual_prices[i - 1]:  # Buy if predicted price > previous price
+            shares_bought = (capital * 0.1) / actual_prices[i]
+            positions += shares_bought
+            capital -= shares_bought * actual_prices[i]
+        elif predictions[i] < actual_prices[i - 1]:  # Sell if predicted price < previous price
+            capital += positions * actual_prices[i]
+            positions = 0
+        
+        portfolio_value = capital + positions * actual_prices[i]
+        capital_over_time.append(portfolio_value)
+
+    roi = (capital_over_time[-1] - initial_capital) / initial_capital * 100
+    print(f"Simulated Model ROI: {roi:.2f}%")
+    return capital_over_time
+
+# 4. Opening Range Breakout Strategy (ORB)
+def opening_range_breakout(prices, opening_range_period=10, initial_capital=100000):
+    capital = initial_capital
+    position = 0
+    capital_over_time = [capital]
+
+    opening_high = np.max(prices[:opening_range_period])
+    opening_low = np.min(prices[:opening_range_period])
+
+    for i in range(opening_range_period, len(prices)):
+        if prices[i] > opening_high and position == 0:
+            # Buy if price breaks above the opening high
+            shares_bought = (capital * 0.1) / prices[i]
+            position += shares_bought
+            capital -= shares_bought * prices[i]
+        elif prices[i] < opening_low and position > 0:
+            # Sell if price breaks below the opening low
+            capital += position * prices[i]
+            position = 0
+        
+        portfolio_value = capital + position * prices[i]
+        capital_over_time.append(portfolio_value)
+
+    roi = (capital_over_time[-1] - initial_capital) / initial_capital * 100
+    print(f"ORB Strategy ROI: {roi:.2f}%")
+    return capital_over_time
+
+# 5. Plot Results - Prediction vs Actual and ROI
+def plot_results(actual_prices, predicted_prices, capital_model, capital_orb):
+    plt.figure(figsize=(14, 7))
+    
+    # Plot predictions vs actual prices
+    plt.subplot(3, 1, 1)
+    plt.plot(actual_prices, color='blue', label='Actual SP500 Prices')
+    plt.plot(predicted_prices, color='red', label='Simulated Predicted SP500 Prices')
+    plt.title('SP500 Price Prediction (Simulated)')
+    plt.xlabel('Days')
+    plt.ylabel('Price')
+    plt.legend()
+    
+    # Plot portfolio value over time for Model-based Strategy
+    plt.subplot(3, 1, 2)
+    plt.plot(capital_model, color='green', label='Portfolio Value (Simulated Model)')
+    plt.title('Portfolio Value Over Time (Simulated Model)')
+    plt.xlabel('Days')
+    plt.ylabel('Portfolio Value ($)')
+    plt.legend()
+    
+    # Plot portfolio value over time for ORB Strategy
+    plt.subplot(3, 1, 3)
+    plt.plot(capital_orb, color='purple', label='Portfolio Value (ORB Strategy)')
+    plt.title('Portfolio Value Over Time (ORB Strategy)')
+    plt.xlabel('Days')
+    plt.ylabel('Portfolio Value ($)')
+    plt.legend()
+    
+    plt.tight_layout()
+    plt.show()
+
+# Main Execution Function
+def main():
+    # 1. Download Data
+    df = download_data()
+
+    # 2. Simulate Predictions
+    actual_prices = df['^GSPC'].values  # S&P 500 prices
+    predictions = generate_simulated_predictions(actual_prices)
+
+    # 3. Backtest the Simulated Model Strategy
+    capital_model = backtest_strategy(predictions, actual_prices)
+
+    # 4. Backtest the Opening Range Breakout (ORB) Strategy
+    capital_orb = opening_range_breakout(actual_prices)
+
+    # 5. Plot the results for both strategies
+    plot_results(actual_prices, predictions, capital_model, capital_orb)
+
+if __name__ == "__main__":
+    main()
