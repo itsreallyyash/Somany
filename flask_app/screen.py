@@ -36,12 +36,13 @@ def screen_stocks(symbols, filter_param='volume', threshold=0, short_window=9, l
 
     for symbol in symbols:
         try:
-            stock_data = yf.download(symbol, period="1y", interval="1wk")
+            stock_data = yf.download(symbol, period="1mo", interval="1wk")
             if stock_data.empty:
                 print(f"No data for {symbol}")
                 continue
             
             stock_data = calculate_moving_averages(stock_data, short_window, long_window)
+        
 
             
             latest_data = stock_data.iloc[-1]
