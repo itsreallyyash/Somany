@@ -94,7 +94,8 @@ nifty500_symbols = [
 ]
 
 @st.cache_data(ttl=3600)
-def fetch_data(symbol, period="10y", interval="1d"):
+
+def fetch_data(symbol, period="max", interval="1d"):
     """
     Fetch historical stock data from Yahoo Finance.
     """
@@ -175,7 +176,7 @@ def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, l
             break
         try:
             # 1. Fetch 10 years of historical data
-            historical_data = fetch_data(symbol, period="10y", interval="1d")
+            historical_data = fetch_data(symbol, period="max", interval="1d")
             if historical_data.empty:
                 st.warning(f"No historical data for {symbol}. Skipping.")
                 continue
@@ -194,7 +195,7 @@ def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, l
                 risk_reward = abs(avg_win / avg_loss) if avg_loss != 0 else np.nan
 
             # 3. Fetch 2-week recent data for current signals
-            recent_data = fetch_data(symbol, period="2wk", interval="1d")
+            recent_data = fetch_data(symbol, period="1mo", interval="1d")
             if recent_data.empty:
                 st.warning(f"No recent data for {symbol}. Skipping.")
                 continue
