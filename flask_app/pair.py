@@ -575,7 +575,7 @@ def main():
         st.dataframe(pairs_summary)
     else:
         st.write("No negatively correlated stock pairs detected based on the current criteria.")
-    neg_pairs_df = find_negatively_correlated_pairs(tickers, data, cap_similarity=0.2)
+    neg_pairs_df = find_negatively_correlated_pairs(tickers, adj_close_data, cap_similarity=0.2)
 
     if neg_pairs_df is not None and not neg_pairs_df.empty and 'Week' in neg_pairs_df.columns:
         # Proceed with filtering only if neg_pairs_df is valid and contains the 'Week' column
