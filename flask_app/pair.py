@@ -453,7 +453,11 @@ def main():
         )
 
         # Filter pairs that occurred during low movement weeks
-        neg_pairs_filtered = neg_pairs_df[neg_pairs_df['Week'].isin(low_movement_weeks)]
+        if 'Week' in neg_pairs_df.columns:
+            neg_pairs_filtered = neg_pairs_df[neg_pairs_df['Week'].isin(low_movement_weeks)]
+        else:
+            st.write("No 'Week' column found in the dataframe.")
+
 
         # Display detected pairs
         if not neg_pairs_filtered.empty:
