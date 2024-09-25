@@ -1,16 +1,11 @@
 flask==3.0.3
 yfinance
-torch==2.0.0  # Ensure this is the right version for your environment
-torch-sparse==0.6.18
+
 absl-py==2.1.0
 aiohappyeyeballs==2.4.0
 aiohttp==3.10.5
 aiosignal==1.3.1
-torch==2.4.1
-torch-scatter==2.1.2
-torch-sparse==0.6.18
-torch-spline-conv==1.2.2
-torch_cluster==1.6.3
+
 altair==5.4.1
 astunparse==1.6.3
 attrs==24.2.0
@@ -118,15 +113,7 @@ tensorflow==2.17.0
 termcolor==2.4.0
 threadpoolctl==3.5.0
 toml==0.10.2
-torch==2.4.1
-torch-geometric==2.6.0
-torch_cluster==1.6.3
-torch_geometric_temporal==0.54.0
-torch_scatter==2.1.2
-torch_sparse==0.6.18
-torch_spline_conv==1.2.2
-torchaudio==2.4.1
-torchvision==0.19.1
+
 tornado==6.4.1
 tqdm==4.66.5
 typing_extensions==4.12.2
