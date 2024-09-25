@@ -447,10 +447,10 @@ def main():
 
         # Find negatively correlated pairs in low movement weeks
         neg_pairs_df = find_negatively_correlated_pairs(
-            available_sector_tickers,
-            adj_close_data[available_sector_tickers],
-            cap_similarity=0.2  # 20% similarity in market cap
-        )
+        available_sector_tickers,  # Only tickers from the current sector
+        adj_close_data[available_sector_tickers],  # Data for the current sector
+        cap_similarity=0.2  # 20% similarity in market cap
+)
 
         # Filter pairs that occurred during low movement weeks
         if 'Week' in neg_pairs_df.columns:
