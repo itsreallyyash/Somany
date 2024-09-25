@@ -336,4 +336,4 @@ if st.button("Run Screening"):
 
 # Footer
 st.markdown("---")
-st.markdown("Developed by [Your Name](https://yourwebsite.com)")
+st.markdown("Developed by [Yash](https://yourwebsite.com)")
