@@ -611,6 +611,8 @@ def main():
     # 9. Additional Features
     # --------------------------
     st.markdown("---")
+    st.markdown("Developed by [Yash](https://www.linkedin.com/in/yashshahh/)")
+
     st.header("ℹ️ Additional Information")
     st.markdown("""
     - **Data Source:** [Yahoo Finance](https://finance.yahoo.com/)
