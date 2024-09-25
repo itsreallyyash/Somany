@@ -18,7 +18,6 @@ filter_param = st.sidebar.selectbox("Filter By", options=["Volume", "Close Price
 threshold = st.sidebar.number_input(f"Threshold for {filter_param}", value=0.0)
 short_window = st.sidebar.number_input("Short Moving Average Window (days)", min_value=1, max_value=50, value=9)
 long_window = st.sidebar.number_input("Long Moving Average Window (days)", min_value=1, max_value=200, value=21)
-vcp_threshold = st.sidebar.number_input("VCP Contraction Threshold", min_value=0.0, max_value=1.0, value=0.1, step=0.01)
 signal_filter = st.sidebar.selectbox("Signal Filter", options=["All", "Buy", "Sell"], index=0)
 summary_type = st.sidebar.selectbox("Summary Type", options=["Detailed", "Summary"], index=1)
 max_symbols = st.sidebar.number_input("Max Symbols to Screen (for performance)", min_value=1, max_value=500, value=100)
@@ -124,24 +123,7 @@ def calculate_relative_volatility(df):
     df['Volatility'] = df['Returns'].rolling(window=21).std()
     return df
 
-def detect_vcp_pattern(df, contraction_threshold=0.1):
-    """
-    Detect Volatility Contraction Pattern (VCP) in the stock data.
-    """
-    if len(df) < 4:
-        return False
 
-    df['High_to_Low'] = df['High'] - df['Low']
-    df['Previous_High_to_Low'] = df['High'].shift(1) - df['Low'].shift(1)
-    df['Contraction'] = df['High_to_Low'] / df['Previous_High_to_Low']
-
-    contractions = df['Contraction'].dropna().values[-3:]
-    if len(contractions) < 3:
-        return False
-    if all(c < contraction_threshold for c in contractions):
-        return True
-
-    return False
 
 def analyze_trades(df, short_window, long_window):
     """
@@ -181,7 +163,7 @@ def detect_buy_sell_signals(recent_data):
     return signal, cross_percentage
 
 def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, long_window=21, 
-                 vcp_threshold=0.1, signal_filter='All', summary_type='Detailed', max_symbols=100):
+                  signal_filter='All', summary_type='Detailed', max_symbols=100):
     """
     Screen stocks based on SMA crossover and VCP pattern, calculate win rate.
     """
@@ -220,7 +202,6 @@ def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, l
             # 4. Calculate moving averages and detect VCP pattern on recent data
             recent_data = calculate_moving_averages(recent_data, short_window, long_window)
             recent_data = calculate_relative_volatility(recent_data)
-            has_vcp = detect_vcp_pattern(recent_data, vcp_threshold)
 
             # 5. Generate current buy/sell signal
             current_signal, cross_percentage = detect_buy_sell_signals(recent_data)
@@ -246,7 +227,6 @@ def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, l
                     'Volatility': f"{latest_data['Volatility']*100:.2f}%",
                     '% Crossed By': f"{cross_percentage:.2f}%",
                     'Signal': signal_display,
-                    'VCP Pattern': 'Yes' if has_vcp else 'No',
                     'Win Rate (%)': f"{win_rate:.2f}",
                     'Avg Win (%)': f"{avg_win*100:.2f}" if not np.isnan(avg_win) else '-',
                     'Avg Loss (%)': f"{avg_loss*100:.2f}" if not np.isnan(avg_loss) else '-',
@@ -268,7 +248,6 @@ def screen_stocks(symbols, filter_param='Volume', threshold=0, short_window=9, l
                     'Symbol': symbol,
                     'Buy': '✔️' if signal_display == 'Buy' else '',
                     'Sell': '✔️' if signal_display == 'Sell' else '',
-                    'VCP Pattern': '✔️' if has_vcp else '',
                     'Win Rate (%)': f"{win_rate:.2f}",
                     'Risk-Reward': f"{risk_reward:.2f}" if not np.isnan(risk_reward) else '-'
                 }
@@ -305,7 +284,6 @@ if st.button("Run Screening"):
             threshold=threshold,
             short_window=short_window,
             long_window=long_window,
-            vcp_threshold=vcp_threshold,
             signal_filter=signal_filter,
             summary_type=summary_type,
             max_symbols=int(max_symbols)
