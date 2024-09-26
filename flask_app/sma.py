@@ -347,6 +347,7 @@ signal_filter = st.sidebar.selectbox("Signal Filter", options=["All", "Buy", "Se
 summary_type = st.sidebar.selectbox("Summary Type", options=["Detailed", "Summary"], index=1)
 max_symbols = st.sidebar.number_input("Max Symbols to Screen (for performance)", min_value=1, max_value=500, value=100)
 
+# Define Nifty 500 symbols (truncated for brevity)
 nifty500_symbols = [
     '360ONE.NS', '3MINDIA.NS', 'ABB.NS', 'ACC.NS','AWL.NS', 'ABCAPITAL.NS', 'ABFRL.NS', 'AEGISLOG.NS', 'AETHER.NS', 
     'AFFLE.NS', 'AJANTPHARM.NS', 'APLLTD.NS', 'ALKEM.NS', 'ALKYLAMINE.NS', 'ALLCARGO.NS', 'ALOKINDS.NS', 'ARE&M.NS', 
