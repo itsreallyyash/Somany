@@ -33,6 +33,7 @@ This guide walks you through the process of setting up **OpenVPN** using **Ansib
 We cover the steps for **macOS**, **Windows**, and **Linux**, with detailed instructions for each platform.
 Whether you're setting up OpenVPN on an AWS EC2 instance or your own server, this guide will help you automate the process.
 """)
+st.video("https://youtu.be/-FPB2BVG8-4")
 
 # Step-by-Step Sections
 st.header("1. Prerequisites")
